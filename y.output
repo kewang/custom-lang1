@@ -1,0 +1,214 @@
+文法
+
+    0 $accept: line_list $end
+
+    1 line_list: line
+    2          | line_list line
+
+    3 line: expression CR
+
+    4 expression: term
+    5           | expression ADD term
+    6           | expression SUB term
+
+    7 term: primary_expression
+    8     | term MUL primary_expression
+    9     | term DIV primary_expression
+
+   10 primary_expression: DOUBLE_LITERAL
+
+
+終結語詞，附有它們出現處的規則
+
+$end (0) 0
+error (256)
+DOUBLE_LITERAL (258) 10
+ADD (259) 5
+SUB (260) 6
+MUL (261) 8
+DIV (262) 9
+CR (263) 3
+
+
+非終結語詞，附有它們出現處的規則
+
+$accept (9)
+    於左側： 0
+line_list (10)
+    於左側： 1 2, 於右側： 0 2
+line (11)
+    於左側： 3, 於右側： 1 2
+expression (12)
+    於左側： 4 5 6, 於右側： 3 5 6
+term (13)
+    於左側： 7 8 9, 於右側： 4 5 6 8 9
+primary_expression (14)
+    於左側： 10, 於右側： 7 8 9
+
+
+狀態 0
+
+    0 $accept: . line_list $end
+
+    DOUBLE_LITERAL  偏移，並進入狀態 1
+
+    line_list           進入狀態 2
+    line                進入狀態 3
+    expression          進入狀態 4
+    term                進入狀態 5
+    primary_expression  進入狀態 6
+
+
+狀態 1
+
+   10 primary_expression: DOUBLE_LITERAL .
+
+    $預設  使用規則 10 以縮減 (primary_expression)
+
+
+狀態 2
+
+    0 $accept: line_list . $end
+    2 line_list: line_list . line
+
+    $end            偏移，並進入狀態 7
+    DOUBLE_LITERAL  偏移，並進入狀態 1
+
+    line                進入狀態 8
+    expression          進入狀態 4
+    term                進入狀態 5
+    primary_expression  進入狀態 6
+
+
+狀態 3
+
+    1 line_list: line .
+
+    $預設  使用規則 1 以縮減 (line_list)
+
+
+狀態 4
+
+    3 line: expression . CR
+    5 expression: expression . ADD term
+    6           | expression . SUB term
+
+    ADD  偏移，並進入狀態 9
+    SUB  偏移，並進入狀態 10
+    CR   偏移，並進入狀態 11
+
+
+狀態 5
+
+    4 expression: term .
+    8 term: term . MUL primary_expression
+    9     | term . DIV primary_expression
+
+    MUL  偏移，並進入狀態 12
+    DIV  偏移，並進入狀態 13
+
+    $預設  使用規則 4 以縮減 (expression)
+
+
+狀態 6
+
+    7 term: primary_expression .
+
+    $預設  使用規則 7 以縮減 (term)
+
+
+狀態 7
+
+    0 $accept: line_list $end .
+
+    $預設  接受
+
+
+狀態 8
+
+    2 line_list: line_list line .
+
+    $預設  使用規則 2 以縮減 (line_list)
+
+
+狀態 9
+
+    5 expression: expression ADD . term
+
+    DOUBLE_LITERAL  偏移，並進入狀態 1
+
+    term                進入狀態 14
+    primary_expression  進入狀態 6
+
+
+狀態 10
+
+    6 expression: expression SUB . term
+
+    DOUBLE_LITERAL  偏移，並進入狀態 1
+
+    term                進入狀態 15
+    primary_expression  進入狀態 6
+
+
+狀態 11
+
+    3 line: expression CR .
+
+    $預設  使用規則 3 以縮減 (line)
+
+
+狀態 12
+
+    8 term: term MUL . primary_expression
+
+    DOUBLE_LITERAL  偏移，並進入狀態 1
+
+    primary_expression  進入狀態 16
+
+
+狀態 13
+
+    9 term: term DIV . primary_expression
+
+    DOUBLE_LITERAL  偏移，並進入狀態 1
+
+    primary_expression  進入狀態 17
+
+
+狀態 14
+
+    5 expression: expression ADD term .
+    8 term: term . MUL primary_expression
+    9     | term . DIV primary_expression
+
+    MUL  偏移，並進入狀態 12
+    DIV  偏移，並進入狀態 13
+
+    $預設  使用規則 5 以縮減 (expression)
+
+
+狀態 15
+
+    6 expression: expression SUB term .
+    8 term: term . MUL primary_expression
+    9     | term . DIV primary_expression
+
+    MUL  偏移，並進入狀態 12
+    DIV  偏移，並進入狀態 13
+
+    $預設  使用規則 6 以縮減 (expression)
+
+
+狀態 16
+
+    8 term: term MUL primary_expression .
+
+    $預設  使用規則 8 以縮減 (term)
+
+
+狀態 17
+
+    9 term: term DIV primary_expression .
+
+    $預設  使用規則 9 以縮減 (term)
